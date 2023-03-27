@@ -85,6 +85,6 @@ class Viaje
     public function mostrarPasajeros()
     {
         foreach ($pasajero as $key => $value) {
-        }
+        }//mis lentes no son feka xq hacen mal a los ojos
     }
 }
