@@ -1,12 +1,5 @@
 <?php
-/*La empresa de Transporte de Pasajeros “Viaje Feliz” quiere registrar la información referente a sus viajes. De cada viaje se precisa almacenar el 
-código del mismo, destino, cantidad máxima de pasajeros y los pasajeros del viaje.
 
-Realice la implementación de la clase Viaje e implemente los métodos necesarios para modificar los atributos de dicha clase (incluso los datos de los pasajeros). Utilice un array que almacene la información correspondiente a los pasajeros. Cada pasajero es un array asociativo con las claves “nombre”, “apellido” y “numero de documento”.
-
-
-
-*/
 class Viaje
 {
     //Atributos
@@ -14,14 +7,16 @@ class Viaje
     private $destino;
     private $cantMaxPasajeros;
     private $pasajeros;
+    private $responsableV;
 
     //Constructor
-    public function __construct($cod, $des, $maxPasajeros)
+    public function __construct($cod, $des, $maxPasajeros, $responsable)
     {
         $this->codigo = $cod;
         $this->destino = $des;
         $this->cantMaxPasajeros = $maxPasajeros;
         $this->pasajeros = [];
+        $this->responsableV = $responsable;
     }
 
     //Destructor
@@ -50,6 +45,10 @@ class Viaje
         return $this->pasajeros;
     }
 
+    public function getResponsable(){
+        return $this->responsableV;
+    }
+
     //Modificadores
     public function setCodigo($cod)
     {
@@ -71,23 +70,23 @@ class Viaje
         $this->pasajeros = $nuevosPasajeros;
     }
 
+    public function setResponsable($empleado)
+    {
+        $this->responsableV = $empleado;
+    }
+
     //Metodos
 
-    public function agregarPasajero($nombre, $apellido, $dni)
+    public function agregarPasajero($pasajero)
     {
-        $pasajero = array(
-            'nombre' => $nombre,
-            'apellido' => $apellido,
-            'dni' => $dni
-        );
         array_push($this->pasajeros, $pasajero);
     }
 
     public function mostrarPasajeros()
     {
-        $retorno = "Lista de pasajeros: ";
+        $retorno = "Lista de pasajeros:\n";
         for ($i = 0; $i < count($this->pasajeros); $i++) {
-            $retorno .= "\n[" . $i . "] " . $this->pasajeros[$i]['nombre'] . " " . $this->pasajeros[$i]['apellido'] . " DNI: " . $this->pasajeros[$i]['dni'] . "\n";
+            $retorno .= "[" . $i . "] " . $this->pasajeros[$i]->__toString(). "\n";
         }
         return $retorno;
     }
@@ -100,7 +99,20 @@ class Viaje
     public function modificarPasajero($n, $clave, $valor)
     {
         $pasajerosActualizados = $this->getPasajeros();
-        $pasajerosActualizados[$n][$clave] = $valor;
+        switch ($clave) {
+            case 'nombre':
+                $pasajerosActualizados[$n]->setNombre("valor");
+                break;
+            case 'apellido':
+                $pasajerosActualizados[$n]->setApellido("valor");
+                break;
+            case 'dni':
+                $pasajerosActualizados[$n]->setDni("valor");
+                break;
+            case 'telefono':
+                $pasajerosActualizados[$n]->setTelefono("valor");
+                break;
+        }
         $this->setPasajeros($pasajerosActualizados);
     }
 
@@ -108,8 +120,9 @@ class Viaje
     {
         return "\n--------------------------------------------\n
         Viaje codigo: " . $this->getCodigo() . "\n
+        Responsable:".$this->getResponsable()->__toString()."\n
         Destino: " . $this->getDestino() . ".\n
-        Capacidad maxima de pasajeros: " . $this->getCantMaxPasajeros() . ".\n" . $this->mostrarPasajeros().
-        "--------------------------------------------\n";
+        Capacidad maxima de pasajeros: " . $this->getCantMaxPasajeros() . ".\n". $this->mostrarPasajeros() .
+        "\n--------------------------------------------\n";
     }
 }
