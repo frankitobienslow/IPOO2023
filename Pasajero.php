@@ -6,14 +6,18 @@ class Pasajero
     private $apellido;
     private $dni;
     private $telefono;
+    private $asiento;
+    private $ticket;
 
     //Constructor
-    public function __construct($nombrePasajero, $apellidoPasajero, $nDni, $nTel)
+    public function __construct($nombrePasajero, $apellidoPasajero, $nDni, $nTel, $nAsiento, $nTicket)
     {
         $this->nombre = $nombrePasajero;
         $this->apellido = $apellidoPasajero;
         $this->dni = $nDni;
         $this->telefono = $nTel;
+        $this->asiento=$nAsiento;
+        $this->ticket=$nTicket;
     }
 
     //Destructor
@@ -42,6 +46,16 @@ class Pasajero
         return $this->telefono;
     }
 
+    public function getAsiento()
+    {
+        return $this->asiento;
+    }
+
+    public function getTicket()
+    {
+        return $this->ticket;
+    }
+
     //Modificadores
     public function setNombre($nombrePasajero)
     {
@@ -63,9 +77,24 @@ class Pasajero
         $this->telefono = $nTel;
     }
 
+    public function setAsiento($nAsiento)
+    {
+        $this->asiento = $nAsiento;
+    }
+
+    public function setTicket($nTicket)
+    {
+        $this->ticket = $nTicket;
+    }
+    
     //Metodos
     public function __toString()
     {
-        return $this->getNombre() . " " . $this->getApellido() . " DNI: " . $this->getDni() . " Telefono: " . $this->getTelefono();
+        return "Ticket N° ".$this->getTicket()." ".$this->getNombre() . " " . $this->getApellido() . " DNI: " . $this->getDni() . " Asiento N° ".$this->getAsiento(). " Telefono: " . $this->getTelefono();
     }
+
+    public function darPorcentajeIncremento(){
+        return 10;
+     }
+
 }
