@@ -1,8 +1,8 @@
 <?php
-include 'Cliente.php';
-include 'Bicicleta.php';
-include 'Venta.php';
-include 'Empresa.php';
+include_once 'Cliente.php';
+include_once 'Bicicleta.php';
+include_once 'Venta.php';
+include_once 'Empresa.php';
 /*
 
 Invocar al método retornarVentasXCliente($tipo,$numDoc)  donde el tipo y número de documento se corresponden con el tipo y número de documento del $objCliente1.
@@ -24,5 +24,5 @@ echo $empresa->registrarVenta([2],$objCliente2,'01/05/2023');
 echo  $empresa->retornarVentasXCliente('DNI',34387456);
 echo  $empresa->retornarVentasXCliente('Pasaporte',40234839);
 
-echo $empresa->__toString();
+echo $empresa;
 

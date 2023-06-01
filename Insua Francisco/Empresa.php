@@ -70,25 +70,26 @@ class Empresa
         $cantBicicletas = count($this->getBicicletas());
         $cantVentas = count($this->getVentas());
 
-        $retorno = $this->getDenominacion() . "\n
-        Direccion: " . $this->getDireccion() . "\n
-        Lista Bicicletas:\n";
+        $retorno = $this->getDenominacion() .
+            "\nDireccion: " . $this->getDireccion() .
+            "\nLista Bicicletas:\n";
 
         for ($i = 0; $i < $cantBicicletas; $i++) {
             $retorno .= $this->getBicicletas()[$i]->__toString();
         }
 
-        $retorno .= "Lista de clientes:\n";
+        $retorno .= "Ventas:\n";
 
         for ($i = 0; $i < $cantClientes; $i++) {
-            $retorno .= $this->getClientes()[$i]->__toString();
+            $retorno .= $this->getClientes()[$i];
+            $ventasDelCliente = $this->retornarVentasXCliente($this->getClientes()[$i]->getTipoDoc(), $this->getClientes()[$i]->getDoc());
+            $cantVentasDelCliente = count($ventasDelCliente);
+            for ($i = 0; $i < $cantVentasDelCliente; $i++) {
+                $retorno .= $ventasDelCliente[$i];
+            }
+            $ventasDelCliente = null;
         }
-
-        $retorno .= "Lista de ventas:\n";
-
-        for ($i = 0; $i < $cantVentas; $i++) {
-            $retorno .= $this->getVentas()[$i]->__toString();
-        }
+        return $retorno;
     }
 
     function retornarBici($codigo)
@@ -110,30 +111,25 @@ class Empresa
     {
 
         $cantCodigos = count($arregloCodigos);
-        $cantBicicletas = count($this->getBicicletas());
-        $retorno='';
 
         if (!$cliente->getBaja()) { //Si el cliente no esta dado de baja...
             $arregloBicicletas = []; //Inicializamos el arregloBicicletas = []
             $precioVenta = 0; //Inicializamos el precioVenta = 0
 
-            for ($i = 0; $i < $cantCodigos; $i++) { //Se compara cada codigo iterando con $i
-                for ($k = 0; $k < $cantBicicletas; $k++) { //con cada bicicleta iterando con $k
-                    if ($arregloCodigos[$i] == $this->getBicicletas()[$k]) { //Si coinciden
-                        if ($this->getBicicletas()[$k]->getActiva) { //Y la bicicleta esta a la venta
-                            array_push($arregloBicicletas, $this->getBicicletas()[$k]); //Se agrega la bicicleta al arreglo de la venta
-                            $precioVenta += $this->getBicicletas()[$k]->darPrecioVenta(); //Se actualiza el precio total de la venta
-                        }
-                    }
-                    $k++;
+
+            for ($i = 0; $i < $cantCodigos; $i++) { //Recorriendo el arreglo de codigos iterando con $i...
+                $biciEncontrada = $this->retornarBici($arregloCodigos[$i]); //Se llama a retornarBici($codigo) con cada codigo
+                if (($biciEncontrada != null) && ($biciEncontrada->getActiva())) { //Si el retorno no es null (existe la bici con ese codigo) y la bici esta a la venta...
+                    array_push($arregloBicicletas, $biciEncontrada); //Se agrega la bicicleta al arreglo de la venta
+                    $precioVenta += $biciEncontrada->darPrecioVenta(); //Se actualiza el precio total de la venta}
+                    $biciEncontrada = null; //$biciEncontrada vuelve a ser null para así buscar la próxima bici
                 }
-                $i++;
             }
-            $this->setVentas($this->getVentas(), $venta = new Venta(count($this->getVentas()), '01/01/1999', $cliente, $arregloBicicletas, $precioVenta)); //Agreamos la venta al arrelo de ventas
-            $retorno=$venta->getPrecioFinal();
+            $this->setVentas($this->getVentas(), $venta = new Venta(count($this->getVentas()), '01/01/1999', $cliente, $arregloBicicletas, $precioVenta)); //Agregamos la venta al arreglo de ventas
+            $retorno = $venta->getPrecioFinal();
         }
-        if($i>=$cantCodigos){
-            $retorno='No se encontro.';
+        if ($precioVenta == 0) {
+            $retorno = 'Las bicicletas elegidas no estan disponibles';
         }
         return $retorno;
     }
@@ -148,7 +144,7 @@ class Empresa
         $ventas = [];
 
         for ($k = 0; $k < $cantVentas; $k++) {
-            if ($this->getVentas()[$k]->getCliente()->getNroDoc() == $nroDoc && $this->getVentas()[$k]->getCliente()->gettipoDoc() == $tipoDoc) {
+            if ($this->getVentas()[$k]->getCliente()->getNroDoc() == $nroDoc && $this->getVentas()[$k]->getCliente()->getTipoDoc() == $tipoDoc) {
                 array_push($ventas[], $this->getVentas()[$k]);
             }
         }

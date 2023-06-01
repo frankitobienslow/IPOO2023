@@ -64,12 +64,12 @@ class Cliente
     //Metodos
     public function __toString()
     {
-        $retorno = $this->getNombre() . " " . $this->getApellido() . "\n
-        " . $this->getTipoDoc() . ": " . $this->getDoc() . "\n";
+        $retorno = $this->getNombre() . " " . $this->getApellido() . " " . $this->getTipoDoc() . ": " . $this->getDoc() . "\n";
 
         if ($this->getBaja()) {
             $retorno .= "DADO DE BAJA\n";
         };
+        $retorno .= "\n";
         return $retorno;
     }
 }

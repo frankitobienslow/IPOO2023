@@ -74,18 +74,14 @@ class Bicicleta
     //Metodos
     public function __toString()
     {
-        $retorno = "********************\n
-    Codigo [" . $this->getCodigo() . "]\n
-    Descripcion: " . $this->getdescripcion() . "\n
-    Año: " . $this->getanio() . "\n
-    Costo:" . $this->getCosto() . "\n"
-            . $this->getincrementoAnual() . "% de incremento anual\n";
-
+        $retorno = "\nCodigo [" . $this->getCodigo() .
+            "]\nDescripcion: " . $this->getdescripcion() .
+            "\nAño: " . $this->getanio() .
+            "\nCosto:" . $this->getCosto() .
+            " (" . $this->getincrementoAnual() . "% de incremento anual)\n";
         if (!$this->getActiva()) {
-            $retorno .= "SIN STOCK\n
-            ********************\n";
-        };
-
+            $retorno .= "SIN STOCK\n\n";
+        }
         return $retorno;
     }
 

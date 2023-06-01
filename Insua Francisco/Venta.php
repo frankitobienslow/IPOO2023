@@ -67,9 +67,9 @@ class Venta
     {
         $cantBicicletas = count($this->getBicicletas());
 
-        $retorno =   "********************\n
-        Venta [" . $this->getNumero() . "]\n
-        Carrito: \n";
+        $retorno =
+        "\nVenta [" . $this->getNumero() . 
+        "]\nCarrito: \n";
         for ($i = 0; $i < $cantBicicletas; $i++) {
             $retorno .= $this->getBicicletas()[$i]->__toString();
         }
@@ -83,8 +83,10 @@ class Venta
 
     function incorporarBicicleta($bicicleta)
     {
+        $bicicletas=$this->getBicicletas();
         if ($bicicleta->getActiva()) {
-            $this->setBicicletas(array_push($bicicletas, $bicicleta));
+            array_push($bicicletas, $bicicleta);
+            $this->setBicicletas($bicicletas);
             $this->setPrecioFinal($this->getPrecioFinal() + $bicicleta->darPrecioVenta());
         } else {
             echo "SIN STOCK";
