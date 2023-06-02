@@ -1,4 +1,5 @@
 <?php
+include_once 'Venta.php';
 /*Se registra la siguiente información: dedeninación, dirección, la colección de clientes, colección de bicicletas 
 y la colección de ventas realizadas.
  */
@@ -68,7 +69,6 @@ class Empresa
     {
         $cantClientes = count($this->getClientes());
         $cantBicicletas = count($this->getBicicletas());
-        $cantVentas = count($this->getVentas());
 
         $retorno = $this->getDenominacion() .
             "\nDireccion: " . $this->getDireccion() .
@@ -103,7 +103,8 @@ class Empresa
             } else {
                 $i++;
             }
-        } while ($bicicleta != null && $i < $cantBicicletas);
+        } while ($bicicleta == null && $i < $cantBicicletas);
+
         return $bicicleta;
     }
 
@@ -125,7 +126,10 @@ class Empresa
                     $biciEncontrada = null; //$biciEncontrada vuelve a ser null para así buscar la próxima bici
                 }
             }
-            $this->setVentas($this->getVentas(), $venta = new Venta(count($this->getVentas()), '01/01/1999', $cliente, $arregloBicicletas, $precioVenta)); //Agregamos la venta al arreglo de ventas
+            $venta = new Venta(count($this->getVentas()), '01/01/1999', $cliente, $arregloBicicletas, $precioVenta); //Agregamos la venta al arreglo de ventas
+            $ventas = $this->getVentas();
+            array_push($ventas, $venta);
+            $this->setVentas($ventas);
             $retorno = $venta->getPrecioFinal();
         }
         if ($precioVenta == 0) {
@@ -138,16 +142,38 @@ class Empresa
 
     function retornarVentasXCliente($tipoDoc, $nroDoc)
     {
-        $retorno = "";
-        $cantClientes = count($this->getClientes());
         $cantVentas = count($this->getVentas());
         $ventas = [];
 
         for ($k = 0; $k < $cantVentas; $k++) {
-            if ($this->getVentas()[$k]->getCliente()->getNroDoc() == $nroDoc && $this->getVentas()[$k]->getCliente()->getTipoDoc() == $tipoDoc) {
-                array_push($ventas[], $this->getVentas()[$k]);
+            if ($this->getVentas()[$k]->getCliente()->getDoc() == $nroDoc && $this->getVentas()[$k]->getCliente()->getTipoDoc() == $tipoDoc) {
+                array_push($ventas, $this->getVentas()[$k]);
             }
         }
         return $ventas;
+    }
+
+    function informarSumaVentasNacionales()
+    {
+        $retorno = 0;
+        $cantVentas = count($this->getVentas());
+        for ($i = 0; $i < $cantVentas; $i++) {
+
+            $retorno += $this->getVentas()[$i]->retornarTotalVentaNacional();
+        }
+        return $retorno;
+    }
+
+    function informarSumaVentasImportadas()
+    {
+        $retorno = [];
+        $cantVentas = count($this->getVentas());
+        for ($i = 0; $i < $cantVentas; $i++) {
+            $cantImportadas = count($this->getVentas()[$i]->retornarBicicletasImportadas());
+            if ($cantImportadas >= 1) {
+                array_push($retorno, $this->getVentas()[$i]);
+            }
+        }
+        return $retorno;
     }
 }

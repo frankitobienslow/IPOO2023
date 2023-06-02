@@ -68,22 +68,21 @@ class Venta
         $cantBicicletas = count($this->getBicicletas());
 
         $retorno =
-        "\nVenta [" . $this->getNumero() . 
-        "]\nCarrito: \n";
+            "\nVenta [" . $this->getNumero() .
+            "]\nCarrito: \n";
         for ($i = 0; $i < $cantBicicletas; $i++) {
-            $retorno .= $this->getBicicletas()[$i]->__toString();
+            $retorno .= $this->getBicicletas()[$i];
         }
-        $retorno .= "Precio final: $" . $this->getPrecioFinal() . "\n
+        $retorno .= "\nPrecio final: $" . $this->getPrecioFinal() . "\n
         Fecha:" . $this->getFecha() . "\n
-        Comprador: " . $this->getCliente() . "\n
-        ********************\n";
+        Comprador: " . $this->getCliente();
 
         return $retorno;
     }
 
     function incorporarBicicleta($bicicleta)
     {
-        $bicicletas=$this->getBicicletas();
+        $bicicletas = $this->getBicicletas();
         if ($bicicleta->getActiva()) {
             array_push($bicicletas, $bicicleta);
             $this->setBicicletas($bicicletas);
@@ -92,4 +91,33 @@ class Venta
             echo "SIN STOCK";
         }
     }
+
+    function retornarTotalVentaNacional()
+    {
+        $retorno = 0;
+        $cantBicicletas = count($this->getBicicletas());
+        for ($i = 0; $i < $cantBicicletas; $i++) {
+            if ($this->getBicicletas()[$i]->getPais() == 'argentina') {
+               $retorno+=$this->getBicicletas()[$i]->darPrecioVenta();
+            }
+        }
+
+        return $retorno;
+    }
+
+    function retornarBicicletasImportadas(){
+        /*Implementar el método informarVentasImportadas() que recorre la colección de ventas realizadas por la empresa y 
+        retorna una colección de ventas de bicicletas  importadas.
+        Si en la venta al menos una de las bicicletas es importada la venta debe ser informada. */
+        $retorno=[];
+        $cantBicicletas = count($this->getBicicletas());
+        for ($i = 0; $i < $cantBicicletas; $i++) {
+            if ($this->getBicicletas()[$i]->getPais() != 'argentina') {
+              array_push($retorno,$this->getBicicletas()[$i]);
+            }
+        }
+        return $retorno;
+    }
+
+
 }

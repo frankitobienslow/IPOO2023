@@ -68,8 +68,10 @@ class Cliente
 
         if ($this->getBaja()) {
             $retorno .= "DADO DE BAJA\n";
+        }else{
+            $retorno .= "\n";
         };
-        $retorno .= "\n";
+        
         return $retorno;
     }
 }
