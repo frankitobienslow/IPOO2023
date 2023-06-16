@@ -3,9 +3,9 @@ require_once 'Bicicleta.php';
 class BicicletaImportada extends Bicicleta{
     
     private $impuesto;
-    public function __construct($cod, $cos, $anio, $des, $incAnual, $act,$imp,$origen)
+    public function __construct($cod, $cos, $anio, $des, $incAnual, $act,$imp)
     {
-        parent::__construct($cod, $cos, $anio, $des, $incAnual, $act,$origen);
+        parent::__construct($cod, $cos, $anio, $des, $incAnual, $act);
         $this->impuesto=$imp;
     }
 
@@ -24,7 +24,6 @@ class BicicletaImportada extends Bicicleta{
     {
         $retorno = "\nCodigo [" . $this->getCodigo() .
             "]\nDescripcion: " . $this->getdescripcion() .
-            "\nOrigen: ".$this->getPais();
             "\nAño: " . $this->getanio() .
             "\nCosto:" . $this->getCosto() . "(".$this->getImpuesto()."% de impuestos)
             " . $this->getincrementoAnual() . "% de incremento anual)\n";
@@ -43,4 +42,5 @@ class BicicletaImportada extends Bicicleta{
         }
         return $retorno;
     }
+   
 }

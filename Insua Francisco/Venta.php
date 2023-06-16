@@ -9,14 +9,16 @@ class Venta
     private $cliente;
     private $bicicletas;
     private $precioFinal;
+    private $formaPago;
     //Constructor
-    public function __construct($num, $f, $comprador, $arregloBicis, $precio)
+    public function __construct($num, $f, $comprador, $arregloBicis, $precio, $pago)
     {
         $this->numero = $num;
         $this->fecha = $f;
         $this->cliente = $comprador;
         $this->bicicletas = $arregloBicis;
         $this->precioFinal = $precio;
+        $this->formaPago = $pago;
     }
     //Observadores
     public function getNumero()
@@ -38,6 +40,10 @@ class Venta
     public function getPrecioFinal()
     {
         return $this->precioFinal;
+    }
+    public function getFormaPago()
+    {
+        return $this->formaPago;
     }
 
     //Modificadores
@@ -61,6 +67,10 @@ class Venta
     {
         $this->precioFinal = $precio;
     }
+    public function setFormaPago($pago)
+    {
+        $this->formaPago = $pago;
+    }
 
     //Metodos
     public function __toString()
@@ -75,7 +85,8 @@ class Venta
         }
         $retorno .= "\nPrecio final: $" . $this->getPrecioFinal() . "\n
         Fecha:" . $this->getFecha() . "\n
-        Comprador: " . $this->getCliente();
+        Comprador: " . $this->getCliente() . "\n
+        Forma de pago: " . $this->getFormaPago();
 
         return $retorno;
     }
@@ -97,27 +108,26 @@ class Venta
         $retorno = 0;
         $cantBicicletas = count($this->getBicicletas());
         for ($i = 0; $i < $cantBicicletas; $i++) {
-            if ($this->getBicicletas()[$i]->getPais() == 'argentina') {
-               $retorno+=$this->getBicicletas()[$i]->darPrecioVenta();
+            if ($this->getBicicletas()[$i]instanceof BicicletaNacional) {
+                $retorno += $this->getBicicletas()[$i]->darPrecioVenta();
             }
         }
 
         return $retorno;
     }
 
-    function retornarBicicletasImportadas(){
+    function retornarBicicletasImportadas()
+    {
         /*Implementar el método informarVentasImportadas() que recorre la colección de ventas realizadas por la empresa y 
         retorna una colección de ventas de bicicletas  importadas.
         Si en la venta al menos una de las bicicletas es importada la venta debe ser informada. */
-        $retorno=[];
+        $retorno = [];
         $cantBicicletas = count($this->getBicicletas());
         for ($i = 0; $i < $cantBicicletas; $i++) {
-            if ($this->getBicicletas()[$i]->getPais() != 'argentina') {
-              array_push($retorno,$this->getBicicletas()[$i]);
+            if ($this->getBicicletas()[$i] instanceof BicicletaImportada) {
+                array_push($retorno, $this->getBicicletas()[$i]);
             }
         }
         return $retorno;
     }
-
-
 }

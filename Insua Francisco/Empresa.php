@@ -108,7 +108,7 @@ class Empresa
         return $bicicleta;
     }
 
-    function registrarVenta($arregloCodigos, $cliente)
+    function registrarVenta($arregloCodigos, $cliente, $tipo, $info)
     {
 
         $cantCodigos = count($arregloCodigos);
@@ -126,10 +126,32 @@ class Empresa
                     $biciEncontrada = null; //$biciEncontrada vuelve a ser null para así buscar la próxima bici
                 }
             }
-            $venta = new Venta(count($this->getVentas()), '01/01/1999', $cliente, $arregloBicicletas, $precioVenta); //Agregamos la venta al arreglo de ventas
+            echo "¿Como desea abonar?";
+            $formaPago = trim(fgets(STDIN));
+            if ($tipo = 'local') {
+                $venta = new VentaLocal(count($this->getVentas()), $info["fecha"], $cliente, $arregloBicicletas, $precioVenta, $info["forma de pago"],$info["dia de retiro"],$info["hora de retiro"]); //Creamos una venta local
+                
+            } else if ($tipo = 'on-line') {
+                echo "Direccion de envio:";
+                $direccion = trim(fgets(STDIN));
+                echo "Telefono de contacto";
+                $contacto = trim(fgets(STDIN));
+                echo "DNI Recepcionista:";
+                $dni = trim(fgets(STDIN));
+                $venta = new VentaOnline(count($this->getVentas()),$info["fecha"], $cliente, $arregloBicicletas, $precioVenta, $info["forma de pago"], $info["direccion de entrega"], $info["dni recepcionista"], $info["telefono de contacto"]); //Creamos una venta online
+            }
+
             $ventas = $this->getVentas();
             array_push($ventas, $venta);
             $this->setVentas($ventas);
+
+            $info["numero"]=count($this->getVentas());
+            $info["cliente"]=$cliente;
+            $info["bicicletas"]=$arregloBicicletas;
+            $info["precio venta"]=$precioVenta;
+
+            $venta->registrarInformacionVenta($info);
+
             $retorno = $venta->getPrecioFinal();
         }
         if ($precioVenta == 0) {
@@ -172,6 +194,30 @@ class Empresa
             $cantImportadas = count($this->getVentas()[$i]->retornarBicicletasImportadas());
             if ($cantImportadas >= 1) {
                 array_push($retorno, $this->getVentas()[$i]);
+            }
+        }
+        return $retorno;
+    }
+
+    function retornarVentasOnline()
+    {
+        $retorno = [];
+        $cantVentas = count($this->getVentas());
+        for ($i = 0; $i < $cantVentas(); $i++) {
+            if ($this->getVentas()[$i] instanceof VentaOnline) {
+                array_push($retorno, $this->getVentas()[$i]);
+            }
+        }
+        return $retorno;
+    }
+
+    function retornarImporteVentasEnLocal()
+    {
+        $retorno = 0;
+        $cantVentas = count($this->getVentas());
+        for ($i = 0; $i < $cantVentas(); $i++) {
+            if ($this->getVentas()[$i] instanceof VentaLocal) {
+                $retorno += $this->getVentas()[$i]->getPrecioFinal();
             }
         }
         return $retorno;

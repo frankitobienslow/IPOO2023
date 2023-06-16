@@ -5,7 +5,7 @@ class BicicletaNacional extends Bicicleta
     private $descuento;
     public function __construct($cod, $cos, $anio, $des, $incAnual, $act, $desc)
     {
-        parent::__construct($cod, $cos, $anio, $des, $incAnual, $act,'argentina');
+        parent::__construct($cod, $cos, $anio, $des, $incAnual, $act);
         $this->descuento = $desc;
     }
 
@@ -23,7 +23,6 @@ class BicicletaNacional extends Bicicleta
     {
         $retorno = "\nCodigo [" . $this->getCodigo() .
             "]\nDescripcion: " . $this->getdescripcion() .
-            "\nOrigen: " . $this->getPais();
         "\nAño: " . $this->getanio() .
             "\nCosto:" . $this->getCosto() . "(" . $this->getDescuento() . "% de descuento)
             " . $this->getincrementoAnual() . "% de incremento anual)\n";

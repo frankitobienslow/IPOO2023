@@ -9,9 +9,8 @@ class Bicicleta
     private $descripcion;
     private $incrementoAnual;
     private $activa;
-    private $pais;
     //Constructor
-    public function __construct($cod, $cos, $anio, $des, $incAnual, $act, $origen)
+    public function __construct($cod, $cos, $anio, $des, $incAnual, $act)
     {
         $this->codigo = $cod;
         $this->costo = $cos;
@@ -19,7 +18,6 @@ class Bicicleta
         $this->descripcion = $des;
         $this->incrementoAnual = $incAnual;
         $this->activa = $act;
-        $this->pais = $origen;
     }
     //Observadores
     public function getCodigo()
@@ -47,10 +45,6 @@ class Bicicleta
         return $this->activa;
     }
 
-    public function getPais()
-    {
-        return $this->pais;
-    }
 
     //Modificadores
     public function setCodigo($cod)
@@ -78,17 +72,11 @@ class Bicicleta
         $this->activa = $act;
     }
 
-    public function setPais($origen)
-    {
-        $this->pais = $origen;
-    }
-
     //Metodos
     public function __toString()
     {
         $retorno = "\nCodigo [" . $this->getCodigo() .
             "]\nDescripcion: " . $this->getdescripcion() .
-            "\nOrigen: " . $this->getPais();
         "\nAño: " . $this->getanio() .
             "\nCosto:" . $this->getCosto() .
             " (" . $this->getincrementoAnual() . "% de incremento anual)\n";
